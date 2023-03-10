@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class Item : MonoBehaviour
@@ -8,10 +9,28 @@ public class Item : MonoBehaviour
     public Type type;
     public int value;
 
+    Rigidbody rb;
+    SphereCollider sphereCollider;
+
     float turnSpeed = 20f;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        sphereCollider = GetComponent<SphereCollider>();
+    }
 
     void Update()
     {
         transform.Rotate(Vector3.up * turnSpeed * Time.deltaTime);
+    }
+
+     void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Floor")
+        {
+            rb.isKinematic = true;
+            sphereCollider.enabled = false;
+        }
     }
 }
